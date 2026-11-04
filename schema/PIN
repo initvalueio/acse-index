@@ -1,0 +1,6 @@
+# resource-index-1.0 is ACSE's contract for what it reads. This directory
+# mirrors it byte for byte; TestSchemaPin fails if the mirror drifts.
+file = resource-index-1.0.schema.json
+upstream_path = contracts/schemas/protocols/resource-index-1.0.schema.json
+upstream_commit = ea49ac45661ff5a6d345ec023cf039f5908fdbd2
+sha256 = 30fdbd6449672dd2f3453188eab7833ac96a1af5d8ed706417dcff1fd2a09af0
