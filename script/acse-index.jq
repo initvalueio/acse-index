@@ -22,7 +22,7 @@ def has_control: explode | any(.[]; . < 32 or . == 127);
 # 1..$max code points, no control character.
 def printable($max): type == "string" and length >= 1 and length <= $max and (has_control | not);
 
-# The fixed attribute order per scanned cloud provider (ledger 02d O-10).
+# The fixed attribute order per scanned cloud provider.
 # Every other provider keeps no id: random_string's id is its result.
 def cloud_attrs($family):
   if $family == "aws" then ["arn", "id"]

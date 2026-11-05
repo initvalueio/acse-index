@@ -57,7 +57,7 @@ var (
 )
 
 // cloudIDAttributes is the fixed attribute order per scanned cloud provider
-// (ledger 02d O-10). The first attribute holding a usable, non-sensitive
+// (the schema allows a cloud id only for these). The first attribute holding a usable, non-sensitive
 // string becomes cloud_id. Every other provider keeps no id at all: a utility
 // provider's id can be the secret itself (random_string.id is its result).
 var cloudIDAttributes = map[string][]string{
