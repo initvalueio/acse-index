@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "resource-index-1.0.schema.json",
+  "title": "ACSE Resource Index 1.0",
+  "description": "A resource index: the sanitized list of resources one Terraform apply manages. The customer's own apply job writes it after each apply, using the open-source acse-index filter (terraform show -json | acse-index --repo --dir --commit --run), to <prefix>/<repo>/<dir>/<commit>.json under a storage prefix that ACSE can read but not write. One object describes one apply of one root module: the repository and working directory, the commit and run it was applied from, when it was produced, and which filter produced it. For each managed resource it records only the address, type, provider and module path, plus the resource's cloud id when the provider is one of the cloud providers ACSE scans (aws, google, google-beta, azurerm, azuread). It never contains an attribute value, output, variable, sensitive value, data source or provider configuration. Every object is closed (additionalProperties false), so a changed filter cannot add values and still pass validation. Data sources are dropped by the filter and rejected by this schema. Customers may audit or replace the filter; ACSE validates every index against this schema when it reads it. The index stays in the customer's storage and is read only by the ACSE runtime running in the customer's environment.",
+  "type": "object",
+  "required": [
+    "resource_index_format_version",
+    "repository",
+    "working_directory",
+    "commit",
+    "run_ref",
+    "produced_at",
+    "producer",
+    "resources"
+  ],
+  "properties": {
+    "resource_index_format_version": {
+      "const": "1.0"
+    },
+    "repository": {
+      "$comment": "The repository as its code host names it: owner/name, or a deeper path where the host uses one.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,99}(/[A-Za-z0-9][A-Za-z0-9._-]{0,99}){1,3}$"
+    },
+    "working_directory": {
+      "$comment": "The root module's directory, relative to the repository; . is the repository root. Printable, one line.",
+      "type": "string",
+      "pattern": "^(\\.|[^\\x00-\\x1f\\x7f/.][^\\x00-\\x1f\\x7f]{0,511})$"
+    },
+    "commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$"
+    },
+    "run_ref": {
+      "$comment": "The apply run this index was produced from: a Terraform Cloud or Terraform Enterprise run id (run-...), or the run reference the customer's pipeline supplies.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@-]{0,255}$"
+    },
+    "produced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "producer": {
+      "$ref": "#/$defs/indexProducer"
+    },
+    "resources": {
+      "type": "array",
+      "maxItems": 50000,
+      "items": {
+        "$ref": "#/$defs/indexedResource"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "indexProducer": {
+      "$comment": "The filter that wrote this index: acse-index (binary or script) or a filter of the customer's own.",
+      "type": "object",
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,63}$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9A-Za-z][0-9A-Za-z.+-]{0,63}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "indexedResource": {
+      "type": "object",
+      "required": [
+        "address",
+        "type",
+        "provider"
+      ],
+      "properties": {
+        "address": {
+          "$comment": "The resource's full address, module path included (module.a.aws_s3_bucket.b).",
+          "type": "string",
+          "pattern": "^[^\\x00-\\x1f\\x7f]{1,1024}$"
+        },
+        "type": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,127}$"
+        },
+        "provider": {
+          "$comment": "The provider's source address as Terraform names it, e.g. registry.terraform.io/hashicorp/aws.",
+          "type": "string",
+          "pattern": "^[A-Za-z0-9.-]{1,253}(/[A-Za-z0-9_.-]{1,64}){1,2}$"
+        },
+        "module_path": {
+          "$comment": "The module address the resource sits in; absent at the root.",
+          "type": "string",
+          "pattern": "^module\\.[^\\x00-\\x1f\\x7f]{1,1015}$"
+        },
+        "cloud_id": {
+          "$comment": "The resource's identity in its cloud (aws: arn, else id; google: self_link, else id; azure: id). Present only for the cloud providers ACSE scans: aws, google, google-beta, azurerm and azuread.",
+          "type": "string",
+          "pattern": "^[^\\x00-\\x1f\\x7f]{1,2048}$"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$comment": "Managed resources only: a data source (data.<type>.<name>, at the root or inside any module path) is never indexed; a module named data is not a data source. Validation-only.",
+          "properties": {
+            "address": {
+              "not": {
+                "pattern": "^(module\\.[^.]+\\.)*data\\."
+              }
+            }
+          }
+        },
+        {
+          "$comment": "A cloud id is kept only for the cloud providers ACSE scans: a utility provider's id is never kept, because for some utility resources (random_string, for example) the id is the value itself. Validation-only.",
+          "if": {
+            "required": [
+              "provider"
+            ],
+            "properties": {
+              "provider": {
+                "pattern": "/hashicorp/(aws|google|google-beta|azurerm|azuread)$"
+              }
+            }
+          },
+          "else": {
+            "not": {
+              "required": [
+                "cloud_id"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

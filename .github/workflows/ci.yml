@@ -1,0 +1,91 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    name: Go tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: gofmt
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+      - run: go vet ./...
+      - run: go test -v ./...
+      - name: Static builds (linux/darwin, amd64/arm64)
+        run: |
+          for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64; do
+            GOOS=${target%/*} GOARCH=${target#*/} CGO_ENABLED=0 \
+              go build -trimpath -ldflags "-s -w" -o "dist/acse-index-${target%/*}-${target#*/}" .
+          done
+          file dist/*
+          ! file dist/acse-index-linux-* | grep -q 'dynamically linked'
+
+  parity:
+    name: jq parity (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04, macos-latest]  # jq 1.6, jq 1.7, macOS jq
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - run: CGO_ENABLED=0 go build -trimpath -o "$RUNNER_TEMP/acse-index" .
+      - run: test/parity.sh "$RUNNER_TEMP/acse-index"
+
+  schema:
+    name: Schema pin and validation
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Mirrored schema matches the pinned upstream sha256
+        run: go test -v -run 'TestSchemaPin|TestVersionMatchesScript' ./...
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check jsonschema==4.23.0 rfc3339-validator==0.1.4
+      - name: Golden indexes validate; upstream invalid fixtures are refused
+        run: python -I test/validate_schema.py
+
+  ac3:
+    name: AC-3 secrets fixture
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - run: go test -v -run 'TestAC3SecretsFixtureLeaksNothing|TestNonCloudResourcesKeepNoValue|TestOnlyIndexFieldsAreWritten' ./...
+      - name: Neither form writes a secret from the fixture
+        run: |
+          go build -o "$RUNNER_TEMP/acse-index" .
+          args=(--repo example-org/platform-infra --dir envs/prod --commit 9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9 --run run-AbCdEf123456)
+          "$RUNNER_TEMP/acse-index" "${args[@]}" < testdata/fixtures/ac3-secrets.json > "$RUNNER_TEMP/go.json"
+          script/acse-index.sh "${args[@]}" < testdata/fixtures/ac3-secrets.json > "$RUNNER_TEMP/jq.json"
+          leaked=0
+          while IFS= read -r secret; do
+            case "$secret" in ''|'#'*) continue ;; esac
+            if grep -qF -- "$secret" "$RUNNER_TEMP/go.json" "$RUNNER_TEMP/jq.json"; then
+              echo "leaked: $secret"; leaked=1
+            fi
+          done < testdata/fixtures/ac3-secrets.secrets
+          exit "$leaked"

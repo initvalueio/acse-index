@@ -1,0 +1,86 @@
+{
+  "format_version": "1.0",
+  "terraform_version": "1.10.3",
+  "values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_s3_bucket.b[\"naïve-eu\"]",
+          "mode": "managed",
+          "type": "aws_s3_bucket",
+          "name": "b",
+          "index": "naïve-eu",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "arn": "arn:aws:s3:::naïve-eu",
+            "id": "naïve-eu"
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "aws_s3_bucket.b[\"quote\\\"and\\\\slash\"]",
+          "mode": "managed",
+          "type": "aws_s3_bucket",
+          "name": "b",
+          "index": "quote\"and\\slash",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "arn": "arn:aws:s3:::q",
+            "id": "q"
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "aws_s3_bucket.b[\"line sep\"]",
+          "mode": "managed",
+          "type": "aws_s3_bucket",
+          "name": "b",
+          "index": "line sep",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "arn": "arn:aws:s3:::ls x",
+            "id": "ls"
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "aws_s3_bucket.b[\"<html>&\"]",
+          "mode": "managed",
+          "type": "aws_s3_bucket",
+          "name": "b",
+          "index": "<html>&",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "arn": "arn:aws:s3:::bad\nnewline",
+            "id": "ok-<id>&"
+          },
+          "sensitive_values": {}
+        }
+      ],
+      "child_modules": [
+        {
+          "address": "module.data[\"x.data.y\"]",
+          "resources": [
+            {
+              "address": "module.data[\"x.data.y\"].aws_s3_bucket.z",
+              "mode": "managed",
+              "type": "aws_s3_bucket",
+              "name": "z",
+              "provider_name": "registry.terraform.io/hashicorp/aws",
+              "schema_version": 0,
+              "values": {
+                "arn": "arn:aws:s3:::z",
+                "id": "z"
+              },
+              "sensitive_values": {}
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "resource_index_format_version": "1.0",
+  "repository": "example-org/platform-infra",
+  "working_directory": "envs/prod",
+  "commit": "9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9",
+  "run_ref": "run-AbCdEf123456",
+  "produced_at": "2026-11-04T16:00:00Z",
+  "producer": {
+    "name": "acse-index",
+    "version": "0.1.0"
+  },
+  "resources": []
+}

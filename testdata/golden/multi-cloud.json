@@ -1,0 +1,123 @@
+{
+  "resource_index_format_version": "1.0",
+  "repository": "example-org/platform-infra",
+  "working_directory": "envs/prod",
+  "commit": "9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9",
+  "run_ref": "run-AbCdEf123456",
+  "produced_at": "2026-11-04T16:00:00Z",
+  "producer": {
+    "name": "acse-index",
+    "version": "0.1.0"
+  },
+  "resources": [
+    {
+      "address": "aws_s3_bucket.logs",
+      "type": "aws_s3_bucket",
+      "provider": "registry.terraform.io/hashicorp/aws",
+      "cloud_id": "arn:aws:s3:::example-logs-7f3a"
+    },
+    {
+      "address": "aws_iam_role.ci",
+      "type": "aws_iam_role",
+      "provider": "registry.terraform.io/hashicorp/aws",
+      "cloud_id": "ci-deployer"
+    },
+    {
+      "address": "aws_db_instance.main",
+      "type": "aws_db_instance",
+      "provider": "registry.terraform.io/hashicorp/aws",
+      "cloud_id": "db-EXAMPLEID"
+    },
+    {
+      "address": "aws_instance.web[0]",
+      "type": "aws_instance",
+      "provider": "registry.terraform.io/hashicorp/aws",
+      "cloud_id": "arn:aws:ec2:eu-west-1:123456789012:instance/i-0aaa"
+    },
+    {
+      "address": "aws_instance.web[1]",
+      "type": "aws_instance",
+      "provider": "registry.terraform.io/hashicorp/aws",
+      "cloud_id": "arn:aws:ec2:eu-west-1:123456789012:instance/i-0bbb"
+    },
+    {
+      "address": "google_storage_bucket.assets",
+      "type": "google_storage_bucket",
+      "provider": "registry.terraform.io/hashicorp/google",
+      "cloud_id": "https://www.googleapis.com/storage/v1/b/example-assets"
+    },
+    {
+      "address": "google_compute_network.vpc",
+      "type": "google_compute_network",
+      "provider": "registry.terraform.io/hashicorp/google-beta",
+      "cloud_id": "projects/example-project/global/networks/vpc"
+    },
+    {
+      "address": "google_project_iam_member.viewer",
+      "type": "google_project_iam_member",
+      "provider": "registry.terraform.io/hashicorp/google",
+      "cloud_id": "example-project/roles/viewer/user:someone@example.com"
+    },
+    {
+      "address": "azurerm_resource_group.rg",
+      "type": "azurerm_resource_group",
+      "provider": "registry.terraform.io/hashicorp/azurerm",
+      "cloud_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-example"
+    },
+    {
+      "address": "azuread_application.app",
+      "type": "azuread_application",
+      "provider": "registry.terraform.io/hashicorp/azuread",
+      "cloud_id": "/applications/11111111-1111-1111-1111-111111111111"
+    },
+    {
+      "address": "kubernetes_namespace.apps",
+      "type": "kubernetes_namespace",
+      "provider": "registry.terraform.io/hashicorp/kubernetes"
+    },
+    {
+      "address": "null_resource.wait",
+      "type": "null_resource",
+      "provider": "registry.terraform.io/hashicorp/null"
+    },
+    {
+      "address": "cloudflare_record.www",
+      "type": "cloudflare_record",
+      "provider": "registry.terraform.io/cloudflare/cloudflare"
+    },
+    {
+      "address": "aws_sqs_queue.jobs",
+      "type": "aws_sqs_queue",
+      "provider": "registry.opentofu.org/hashicorp/aws",
+      "cloud_id": "arn:aws:sqs:eu-west-1:123456789012:jobs"
+    },
+    {
+      "address": "module.network.aws_vpc.this",
+      "type": "aws_vpc",
+      "provider": "registry.terraform.io/hashicorp/aws",
+      "module_path": "module.network",
+      "cloud_id": "arn:aws:ec2:eu-west-1:123456789012:vpc/vpc-0abc"
+    },
+    {
+      "address": "module.network.module.subnets[\"a\"].aws_subnet.this",
+      "type": "aws_subnet",
+      "provider": "registry.terraform.io/hashicorp/aws",
+      "module_path": "module.network.module.subnets[\"a\"]",
+      "cloud_id": "arn:aws:ec2:eu-west-1:123456789012:subnet/subnet-0a"
+    },
+    {
+      "address": "module.network.module.subnets[\"b\"].aws_subnet.this",
+      "type": "aws_subnet",
+      "provider": "registry.terraform.io/hashicorp/aws",
+      "module_path": "module.network.module.subnets[\"b\"]",
+      "cloud_id": "arn:aws:ec2:eu-west-1:123456789012:subnet/subnet-0b"
+    },
+    {
+      "address": "module.data.aws_s3_bucket.raw",
+      "type": "aws_s3_bucket",
+      "provider": "registry.terraform.io/hashicorp/aws",
+      "module_path": "module.data",
+      "cloud_id": "arn:aws:s3:::example-raw"
+    }
+  ]
+}

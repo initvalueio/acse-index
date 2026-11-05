@@ -1,0 +1,33 @@
+{
+  "resource_index_format_version": "1.0",
+  "repository": "acme/payments-infra",
+  "working_directory": "envs/prod",
+  "commit": "9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9",
+  "run_ref": "run-8sTzQvBh2Kx1",
+  "produced_at": "2026-11-04T16:00:00Z",
+  "producer": {
+    "name": "acse-index",
+    "version": "1.0.0"
+  },
+  "resources": [
+    {
+      "address": "module.data.module.bucket.aws_s3_bucket.this",
+      "type": "aws_s3_bucket",
+      "provider": "registry.terraform.io/hashicorp/aws",
+      "module_path": "module.data.module.bucket",
+      "cloud_id": "arn:aws:s3:::acme-payments-raw"
+    },
+    {
+      "address": "google_storage_bucket.logs",
+      "type": "google_storage_bucket",
+      "provider": "registry.terraform.io/hashicorp/google",
+      "cloud_id": "https://www.googleapis.com/storage/v1/b/acme-logs"
+    },
+    {
+      "address": "random_string.suffix",
+      "type": "random_string",
+      "provider": "registry.terraform.io/hashicorp/random",
+      "cloud_id": "x7Kq2"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "format_version": "1.0",
+  "values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_s3_bucket.a",
+          "mode": "ephemeral",
+          "type": "aws_s3_bucket",
+          "name": "a",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {},
+          "sensitive_values": {}
+        }
+      ]
+    }
+  }
+}

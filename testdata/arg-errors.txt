@@ -1,0 +1,19 @@
+# One argument list per line, tab-separated; each must be refused by both forms (test/parity.sh, TestArgumentErrors).
+--repo	just-a-name	--dir	envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00Z
+--repo	owner/na me	--dir	envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00Z
+--repo	-owner/name	--dir	envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00Z
+--repo	example-org/platform-infra	--dir	/abs/path	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00Z
+--repo	example-org/platform-infra	--dir	./envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00Z
+--repo	example-org/platform-infra	--dir	../up	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00Z
+--repo	example-org/platform-infra	--dir	envs/prod	--commit	9C1E5B7A3D2F4E6081A9B8C7D6E5F4A3B2C1D0E9	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00Z
+--repo	example-org/platform-infra	--dir	envs/prod	--commit	9c1e5b7	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00Z
+--repo	example-org/platform-infra	--dir	envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	-run	--produced-at	2026-11-04T16:00:00Z
+--repo	example-org/platform-infra	--dir	envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run id	--produced-at	2026-11-04T16:00:00Z
+--repo	example-org/platform-infra	--dir	envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-11-04 16:00:00Z
+--repo	example-org/platform-infra	--dir	envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00+00:00
+--repo	example-org/platform-infra	--dir	envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-13-04T16:00:00Z
+--repo	example-org/platform-infra	--dir	envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-11-04T25:00:00Z
+--dir	envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00Z
+--repo	example-org/platform-infra	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00Z
+--repo	example-org/platform-infra	--dir	envs/prod	--run	run-AbCdEf123456	--produced-at	2026-11-04T16:00:00Z
+--repo	example-org/platform-infra	--dir	envs/prod	--commit	9c1e5b7a3d2f4e6081a9b8c7d6e5f4a3b2c1d0e9	--produced-at	2026-11-04T16:00:00Z

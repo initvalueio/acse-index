@@ -1,0 +1,21 @@
+{
+  "format_version": "0.1",
+  "values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_s3_bucket.a",
+          "mode": "managed",
+          "type": "aws_s3_bucket",
+          "name": "a",
+          "provider_name": "aws",
+          "schema_version": 0,
+          "values": {
+            "arn": "arn:aws:s3:::a"
+          },
+          "sensitive_values": {}
+        }
+      ]
+    }
+  }
+}
